@@ -3,7 +3,6 @@ pipeline {
         scannerHome = tool name: 'sonarqube-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
     agent any
-    }
     stages {
         stage("test-sonar"){
             steps{
