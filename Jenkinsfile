@@ -20,10 +20,9 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
+        stage('Install dependecies') {
             steps {
                 sh 'npm install'
-                sh 'CI=false npm run build'
             }
         }
         
