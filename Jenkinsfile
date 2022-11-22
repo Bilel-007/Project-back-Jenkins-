@@ -49,11 +49,11 @@ pipeline {
         
         
 
-        stage('Deliver') { 
+        stage('deploy to k8s') { 
             steps {
-                sh './jenkins/scripts/deliver.sh' 
-                input message: 'Finished using the web site? (Click "Proceed" to continue)' 
-                sh './jenkins/scripts/kill.sh' 
+                script{
+                    kubernetesDeploy (configs: 'mongo-secret.yaml','mongo.yaml','mongo-configmap.yaml','mongo-volume.yaml','backend.yaml', kubeConfig: [path: './kubernetes'], kubeconfigId: 'k8s')
+                }
             }
         }
      }
