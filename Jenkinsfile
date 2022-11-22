@@ -56,7 +56,7 @@ pipeline {
                     kubernetesDeploy (configs: './kubernetes/mongo.yaml',kubeconfigId: 'k8s')
                     kubernetesDeploy (configs: './kubernetes/mongo-configmap.yaml',kubeconfigId: 'k8s')
                     kubernetesDeploy (configs: './kubernetes/mongo-volume.yaml',kubeconfigId: 'k8s')
-                    kubernetesDeploy (configs: './kubernetes/backend.yaml',kubeconfigId: 'k8s')}
+                    kubernetesDeploy (configs: './kubernetes/backend.yaml',kubeconfigId: 'k8s')
                 }
             }
         }
