@@ -1,21 +1,54 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:lts-buster-slim'
-            args '-p 5000:5000'
-        }
-    }
+    environment {
+                imagename = "bilel707/projectback"
+                scannerHome = tool name: 'sonarqube-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                registryCredential = 'Docker_hub'
+                }
+    agent any
     stages {
-        stage('Build') {
+        stage("test-sonar"){
+            steps{
+                script {
+                    withSonarQubeEnv("sonarQube") {
+                        
+                    sh "${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=Project-Devops-back \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=c8b2c764943238488fb46caf357927b330c86cbf"
+                    }
+                }
+            }
+        }
+        stage('Install dependecies') {
             steps {
                 sh 'npm install'
             }
         }
-        stage('Test') {
-            steps {
-                sh "echo 'test done' "
+        
+        
+        stage("docker-build"){
+            steps{
+                script {
+                    dockerImage = docker.build imagename   
+                }
             }
         }
+        
+        
+        stage("docker-deploy-img"){
+            steps{
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+        
+        
+        
+
         stage('Deliver') { 
             steps {
                 sh './jenkins/scripts/deliver.sh' 
@@ -23,5 +56,5 @@ pipeline {
                 sh './jenkins/scripts/kill.sh' 
             }
         }
-    }
+     }
 }
