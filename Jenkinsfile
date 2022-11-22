@@ -52,7 +52,7 @@ pipeline {
         stage('deploy to k8s') { 
             steps {
                 script{
-                    kubernetesDeploy (configs: 'mongo-secret.yaml','mongo.yaml','mongo-configmap.yaml','mongo-volume.yaml','backend.yaml', kubeConfig: [path: './kubernetes'], kubeconfigId: 'k8s')
+                    kubernetesDeploy (configs: './kubernetes',kubeconfigId: 'k8s')
                 }
             }
         }
